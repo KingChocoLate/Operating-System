@@ -24,11 +24,12 @@ public class bank implements Runnable {
 
     @Override
     public void run () {
-        //lock.lock();
+        lock.lock();
         deposit();
         System.out.println("Value for Thread after deposit " + Thread.currentThread().getName() + " " + get_value());
 
         withdraw();
         System.out.println("Value for Thread after withdraw " + Thread.currentThread().getName() + " " + get_value());
+        lock.unlock();
     }
 }
