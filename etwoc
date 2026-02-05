@@ -1,0 +1,5 @@
+#!/bin/bash
+a=1.2
+b=2.3
+sum=$(echo "$a + $b" | bc)
+echo "Sum of $a and $b is: $sum"

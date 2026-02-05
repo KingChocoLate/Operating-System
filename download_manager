@@ -1,0 +1,22 @@
+#!/bin/bash
+
+shopt -s nullglob
+
+for f in *; do
+  # skip directories
+  [ -d "$f" ] && continue
+
+  # get extension
+  ext="${f##*.}"
+  if [ "$ext" = "$f" ]; then
+    ext="no_extension"
+  fi
+
+  # make folder if not exists
+  mkdir -p "$ext"
+
+  # move file
+  mv -- "$f" "$ext/"
+done
+
+echo "Done, Organized files by extension."

@@ -1,0 +1,83 @@
+#!/bin/bash
+
+# Must be root
+if [ "$EUID" -ne 0 ]; then
+  echo "Error: Please run as root (sudo)."
+  exit 1
+fi
+
+# 1) Prompt group name until unique
+while true; do
+  read -r -p "Enter new group name: " grp
+  [ -z "$grp" ] && echo "Group name can't be empty." && continue
+
+  if getent group "$grp" >/dev/null; then
+    echo "Error: Group '$grp' already exists. Try another."
+  else
+    break
+  fi
+done
+
+# 2) Prompt username until unique
+while true; do
+  read -r -p "Enter new username: " usr
+  [ -z "$usr" ] && echo "Username can't be empty." && continue
+
+  if getent passwd "$usr" >/dev/null; then
+    echo "Error: User '$usr' already exists. Try another."
+  else
+    break
+  fi
+done
+
+# 3) Create group
+groupadd "$grp" || { echo "Failed to create group."; exit 1; }
+
+# 4) Create user with bash shell and primary group = new group
+useradd -m -s /bin/bash -g "$grp" "$usr" || { echo "Failed to create user."; exit 1; }
+
+# 5) Set password
+while true; do
+  read -r -s -p "Enter password for $usr: " pw1
+  echo
+  read -r -s -p "Confirm password: " pw2
+  echo
+
+  if [ "$pw1" != "$pw2" ]; then
+    echo "Passwords do not match. Try again."
+  elif [ -z "$pw1" ]; then
+    echo "Password can't be empty. Try again."
+  else
+    break
+  fi
+done
+
+echo "$usr:$pw1" | chpasswd || { echo "Failed to set password."; exit 1; }
+
+# 6) Ensure user is in the group (primary group already, but we verify)
+if id -nG "$usr" | grep -qw "$grp"; then
+  echo "User '$usr' is a member of '$grp'"
+else
+  usermod -aG "$grp" "$usr"
+  echo "Added '$usr' to group '$grp'."
+fi
+
+# 7) Create directory at root with same name as user
+dir="/$usr"
+if [ -e "$dir" ]; then
+  echo "Error: $dir already exists. Not overwriting."
+  exit 1
+fi
+
+mkdir "$dir" || { echo "Failed to create directory $dir"; exit 1; }
+
+# 8) Set ownership to user:group
+chown "$usr:$grp" "$dir" || { echo "Failed to set ownership."; exit 1; }
+
+# 9) Permissions: full control owner + group (770) + sticky bit (only owner can delete) => 1770
+chmod 1770 "$dir" || { echo "Failed to set permissions."; exit 1; }
+
+echo "Done"
+echo "Group: $grp"
+echo "User : $usr"
+echo "Dir  : $dir  (owner=$usr, group=$grp, perms=1770)"
