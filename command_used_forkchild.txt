@@ -1,0 +1,15 @@
+  165  cat wildcardex1_command_history.txt
+  166  mkdir class_activity2
+  167  cd class_activity2
+  168  touch forkchild.c
+  169  gcc -o forkchild forkchild.c
+  170  nano forkchild.c
+  171  cat forkchild.c
+  172  gcc -o forkchild forkchild.c
+  173  nano forkchild.c
+  174  gcc -o forkchild forkchild.c
+  175  ./forkchild > result_forkchild.txt
+  176  nano result_forkchild.txt
+  177  lx
+  178  ls
+  179  history | tail -n 15 > command_used_forkchild.txt
