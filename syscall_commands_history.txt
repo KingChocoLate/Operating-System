@@ -1,0 +1,50 @@
+  228  ./receiver > result-mq-ipc.txt
+  229  nano receiver.c
+  230  ./sender
+  231  ./receiver > result-mq-ipc.txt
+  232  cd .
+  233  cd ..
+  234  mkdir SHM-IPC
+  235  cd SHM-IPC
+  236  nano shm-producer.c
+  237  nano shm-consumer.c
+  238  gcc -o shm-producer shm-producer.c
+  239  gcc -o shm-consumer shm-consumer.c
+  240  ./shm-producer
+  241  ./shm-consumer > result-shm-ipc.txt
+  242  nano shm-producer.c
+  243  nano shm-consumer.c
+  244  nano shm-producer.c
+  245  nano shm-consumer.c
+  246  gcc -o shm-producer shm-producer.c
+  247  gcc -o shm-consumer shm-consumer.c
+  248  ./shm-producer
+  249  ./shm-consumer > result-shm-ipc.txt
+  250  cd ..
+  251  tree /class_activity3
+  252  tree
+  253  openssl rand -based64 32
+  254  openssl rand -base64 32
+  255  ls
+  256  cd class_activity1
+  257  ls
+  258  nano copyfilesyscall.c
+  259  nano copyresult.txt
+  260  nano result.txt
+  261  history
+  262  cd ..
+  263  rm -r class_activity1
+  264  ls
+  265  mkdir class_activity1
+  266  cd class_activity1
+  267  nano syscall1.c
+  268  gcc syscall1.c -o syscall1
+  269  ./syscall1
+  270  nano result.txt
+  271  nano copyfilesyscall.c
+  272  gcc copyfilesyscall.c -o copyfilesyscall
+  273  ./copyfilesyscall
+  274  ls
+  275  cat copyresult.txt
+  276  history
+  277  history | tail -n 50 > ~/class_activity1/syscall_commands_history.txt
